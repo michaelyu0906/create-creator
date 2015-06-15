@@ -1,46 +1,62 @@
 #include<fstream>
+#include<string>
 using namespace std;
 ofstream fout("homework.xml");
 class homework
 {
+	private:
+		int subjectNum = 2;
 	public:
 		void print()
 		{ 
 			fout << "<homework>\n";
 			for (int i = 0; i < subjectNum; i++)
 				subject[i].print();
-			fout << "</homework>";
+			fout << "</homework>\n";
 		}
-	private:
-		int subjectNum=2;
 		class subject
-		{
-			
+		{	
+			private:
+				class chapter
+			{
+				private:
+					int queNum;
+					class ques
+					{
+						private:
+							int queNo;
+							int difficulty;
+						public:
+						void print(int chapterNo)
+						{
+							fout << "\t\t\t<ques>\n";
+							fout << "\t\t\t\t<quesNo>" << chapterNo << "." << queNo << "</quesNo>\n";
+							fout << "\t\t\t\t<difficulty>" << difficulty << "</difficulty>\n";
+						}
+					};
+					ques __ques[2];
+				public:
+					int chapterNo;
+					void print()
+					{
+						fout << "\t\t<chapter No=\"" << chapterNo << "\">\n";
+						for (int i = 0; i < queNum; i++)
+							__ques[i].print(chapterNo);
+						fout << "\t\t</chapter>\n";
+					}
+			};
+			private:
+				int chapterNum; 
+				chapter __chapter[2];
 			public:
 				void print()
 				{
 					string subjectName="adsf";
-					fout << "\t<subject name=\"";
-					fout << subjectName;
+					fout << "\t<subject name=\"" << subjectName << "\">";
+					for (int i = 0; i < chapterNum; i++)
+						__chapter[i].print();
+					fout << "\t</subject>\n";
 				}
-			private:
-				class chapter
-				{
-					public:
-						void print()
-						{
-
-						}
-					private:
-						class ques
-						{
-							public:
-								void print()
-								{
-
-								}
-						};
-				};
 		};
 	subject subject[2];
 };
