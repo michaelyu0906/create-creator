@@ -5,23 +5,31 @@ ofstream fout("homework.xml");
 class homework
 {
 	private:
-		int subjectNum = 2;
+		int subjectNum;
 	public:
-		void print()
+		void print()  //print homework
 		{ 
 			fout << "<homework>\n";
 			for (int i = 0; i < subjectNum; i++)
-				subject[i].print();
+				subjectHead[i]->print();
 			fout << "</homework>\n";
+		}
+		void Appendsubjects(int subject_Num)  //apply ram for subjects
+		{
+			subjectNum = subject_Num;
+			for (int i = 0; i < subjectNum; i++)
+				subjectHead[i] = new subject[1];
 		}
 		class subject
 		{	
 			private:
+				string subjectName;
+				int chapterNum; 
 				class chapter
-			{
-				private:
-					int queNum;
-					class ques
+				{
+					private:
+						int queNum;
+						class ques
 					{
 						private:
 							int queNo;
@@ -34,9 +42,9 @@ class homework
 							fout << "\t\t\t\t<difficulty>" << difficulty << "</difficulty>\n";
 						}
 					};
-					ques __ques[2];
-				public:
-					int chapterNo;
+						ques __ques[2];
+					public:
+						int chapterNo;
 					void print()
 					{
 						fout << "\t\t<chapter No=\"" << chapterNo << "\">\n";
@@ -44,21 +52,26 @@ class homework
 							__ques[i].print(chapterNo);
 						fout << "\t\t</chapter>\n";
 					}
-			};
-			private:
-				int chapterNum; 
-				chapter __chapter[2];
+				};
+				chapter* chapterHead[100];
 			public:
-				void print()
+				void subjectDetails(string subject_Name, int chapter_Num)  //apply ram for chapters
 				{
-					string subjectName="adsf";
+					subjectName = subject_Name;
+					chapterNum = chapter_Num;
+					for (int i = 0; i < chapterNum; i++)
+						chapterHead[i] = new chapter[1];
+				}
+				void print() //print a subject
+				{
 					fout << "\t<subject name=\"" << subjectName << "\">";
 					for (int i = 0; i < chapterNum; i++)
-						__chapter[i].print();
+						chapterHead[i]->print();
 					fout << "\t</subject>\n";
 				}
 		};
-	subject subject[2];
+	private:
+		subject* subjectHead[100];//point the head to subject
 };
 
 int main()
