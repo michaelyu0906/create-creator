@@ -3,6 +3,77 @@
 #include<map>
 using namespace std;
 ofstream fout("homework.xml");
+class ques
+{
+private:
+	int difficulty;
+public:
+	void queAppend(int __difficulty)
+	{
+		difficulty = __difficulty;
+	}
+	void print()
+	{
+		fout << "\t\t\t\t<difficulty>" << difficulty << "</difficulty>\n";
+		fout << "</ques>\n";
+	}
+};
+class chapter
+{
+private:
+	int queNum = 0;
+public:
+	ques* queHead[100];
+	map <int, int> queNo_List;
+	map <int, int> queList_No;
+	void queAppend(int que_No, int __difficulty)
+	{
+		queList_No[queNum++] = que_No;
+		queNo_List[que_No] = queNum - 1;
+		queHead[queNum - 1] = new ques[1];
+		queHead[queNum - 1]->queAppend(__difficulty);
+	}
+	void print(int chapter_No)
+	{
+		for (int i = 0; i < queNum; i++)
+		{
+			fout << "\t\t\t<ques>\n";
+			fout << "\t\t\t\t<quesNo>" << chapter_No << "." << queList_No[i] << "</quesNo>\n";
+			queHead[i]->print();
+		}
+		fout << "\t\t</chapter>\n";
+	}
+};
+class subject
+{
+public:
+	int chapterNum = 0;
+	chapter* chapterHead[100];
+	map <int, int> chapterNo_List;
+	map<int, int> chapterList_No;
+public:
+	void chapterAppend(int chapter_No, int que_No, int __difficulty)
+	{
+		if (chapterNo_List.find(chapter_No) == chapterNo_List.end())
+		{
+			chapterList_No[chapterNum++] = chapter_No;
+			chapterNo_List[chapter_No] = chapterNum - 1;
+			chapterHead[chapterNum - 1] = new chapter[1];
+			chapterHead[chapterNum - 1]->queAppend(que_No, __difficulty);
+		}
+		else chapterHead[chapterNo_List[chapter_No]]->queAppend(que_No, __difficulty);
+	}
+	void print() //print a subject
+	{
+
+		for (int i = 0; i < chapterNum; i++)
+		{
+			fout << "\t\t<chapter No=\"" << chapterList_No[i] << "\">\n";
+			chapterHead[i]->print(chapterList_No[i]);
+		}
+		fout << "\t</subject>\n";
+	}
+};
 class homework
 {
 private:
@@ -10,77 +81,6 @@ private:
 	map <string, int> subjectName_No;
 	int subjectNum = 0;
 public:
-	class subject
-	{
-	public:
-		int chapterNum = 0;
-		class chapter
-		{
-		private:
-			int queNum=0;
-		public:
-			class ques
-			{
-			private:
-				int difficulty;
-			public:
-				void queAppend(int __difficulty)
-				{
-					difficulty = __difficulty;
-				}
-				void print()
-				{
-					fout << "\t\t\t\t<difficulty>" << difficulty << "</difficulty>\n";
-					fout << "</ques>\n";
-				}
-			};
-			ques* queHead[100];
-			map <int, int> queNo_List;
-			map <int, int> queList_No;
-			void queAppend(int que_No, int __difficulty)
-			{
-				queList_No[queNum++] = que_No;
-				queNo_List[que_No] = queNum - 1;
-				queHead[queNum - 1] = new ques[1];
-				queHead[queNum - 1]->queAppend(__difficulty);
-			}
-			void print(int chapter_No)
-			{
-				for (int i = 0; i < queNum; i++)
-				{
-					fout << "\t\t\t<ques>\n";
-					fout << "\t\t\t\t<quesNo>" << chapter_No << "." << queList_No[i] << "</quesNo>\n";
-					queHead[i]->print();
-				}
-				fout << "\t\t</chapter>\n";
-			}
-		};
-		chapter* chapterHead[100];
-		map <int, int> chapterNo_List;
-		map<int, int> chapterList_No;
-	public:
-		void chapterAppend(int chapter_No,int que_No,int __difficulty)
-		{
-			if (chapterNo_List.find(chapter_No) == chapterNo_List.end())
-			{
-				chapterList_No[chapterNum++] = chapter_No;
-				chapterNo_List[chapter_No] = chapterNum - 1;
-				chapterHead[chapterNum - 1] = new chapter[1];
-				chapterHead[chapterNum - 1]->queAppend(que_No, __difficulty);
-			}
-			else chapterHead[chapterNo_List[chapter_No]]->queAppend(que_No, __difficulty);
-		}
-		void print() //print a subject
-		{
-			
-			for (int i = 0; i < chapterNum; i++)
-			{
-				fout << "\t\t<chapter No=\"" << chapterList_No[i] << "\">\n";
-				chapterHead[i]->print(chapterList_No[i]);
-			}
-			fout << "\t</subject>\n";
-		}
-	};
 	void print()  //print homework
 	{
 		fout << "<homework>\n";
