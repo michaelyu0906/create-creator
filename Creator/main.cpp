@@ -31,6 +31,7 @@ public:
 				void print()
 				{
 					fout << "\t\t\t\t<difficulty>" << difficulty << "</difficulty>\n";
+					fout << "</ques>\n";
 				}
 			};
 			ques* queHead[100];
@@ -60,7 +61,7 @@ public:
 	public:
 		void chapterAppend(int chapter_No,int que_No,int __difficulty)
 		{
-			if (chapterNo_List[chapter_No] == NULL)
+			if (chapterNo_List.find(chapter_No) == chapterNo_List.end())
 			{
 				chapterList_No[chapterNum++] = chapter_No;
 				chapterNo_List[chapter_No] = chapterNum - 1;
@@ -85,14 +86,14 @@ public:
 		fout << "<homework>\n";
 		for (int i = 0; i < subjectNum; i++)
 		{
-			fout << "\t<subject name=\"" << subjectNo_Name[i] << "\">";
+			fout << "\t<subject name=\"" << subjectNo_Name[i] << "\">\n";
 			subjectHead[i]->print();
 		}
 		fout << "</homework>\n";
 	}
 	void Append(string subject_Name, int chapter_No,int que_No,int __difficulty)  //apply ram for a subject
 	{
-		if (subjectName_No[subject_Name] == NULL)
+		if (subjectName_No.find(subject_Name) == subjectName_No.end())
 		{
 			subjectHead[subjectNum++] = new subject[1];
 			subjectName_No[subject_Name] = subjectNum - 1;
