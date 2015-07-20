@@ -8,6 +8,7 @@ namespace PSO
 {
     public class function//一元n次函数
     {
+        protected double xmin = -100, xmax = 100;//函数定义区间
         private double[] xi = new double[100];//第i次项系数
         private int n = 0;//最高为n次
         private double xn = 1;//x的n次幂
